@@ -62,8 +62,6 @@ export default class HomeScreen extends React.Component {
   }
 
   _getName() {
-    const spawn = require("child_process").spawn;
-    const pythonProcess = spawn('python',["../src/methods.py","Terry"]);
     return ("Terry Keffer");
   }
 
