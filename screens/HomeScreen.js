@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
+// import { command } from 'node-run-cmd';
 import { MonoText } from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
@@ -18,6 +18,7 @@ export default class HomeScreen extends React.Component {
   };
 
   render() {
+    // var nrc = require('node-run-cmd')
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -33,62 +34,51 @@ export default class HomeScreen extends React.Component {
           </View>
         
           <View style={styles.getStartedContainer}>
-            {/* {this._maybeRenderDevelopmentModeWarning()}*/}
 
-            <Text style={styles.getStartedText}>Hi Terry</Text>
-
+            <Text style={styles.getStartedText}>Hi, {this._getName()}</Text>
+            <Text> </Text>
+            <Text>Your accounts-</Text>
           </View>
-
-          {/*<View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>*/}
-        </ScrollView>
 
         <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
+          <View style={styles.moneyView}>
+            <Text style={styles.tabBarInfoText}>Checking Balance:</Text>
+            <Text style={styles.tabBarBalance}>$ {this._getCheckingBal()}</Text>
           </View>
+          <Text style={styles.tabBarName}>Account # ...{this._getLastFour()}</Text>
         </View>
+
+        <View style={styles.tabBarInfoContainer2}>
+          <View style={styles.moneyView}>
+            <Text style={styles.tabBarInfoText}>Credit Balance:</Text>
+            <Text style={styles.tabBarBalance}>$ {this._getCreditBal()}</Text>
+          </View>
+          <Text style={styles.tabBarName}>Account # ...{this._getLastFour()}</Text>
+        </View>
+
+        </ScrollView>
       </View>
     );
   }
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
+  _getName() {
+    const spawn = require("child_process").spawn;
+    const pythonProcess = spawn('python',["../src/methods.py","Terry"]);
+    return ("Terry Keffer");
   }
 
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
+  _getCheckingBal() {
+    return 20;
+  }
 
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
+  _getCreditBal() {
+    return 35;
+  }
+
+  _getLastFour() {
+    return "3d76";
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -122,50 +112,69 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginHorizontal: 50,
   },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
   getStartedText: {
-    fontSize: 25,
+    fontSize: 28,
     color: '#000',
-    lineHeight: 25,
+    lineHeight: 28,
     textAlign: 'center',
   },
   tabBarInfoContainer: {
+    flex: 1,
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    left: 20,
+    right: 20,
+    top: 225,
     ...Platform.select({
       ios: {
-        shadowColor: 'black',
+        shadowColor: '#004977',
         shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.5,
         shadowRadius: 3,
       },
       android: {
         elevation: 20,
       },
     }),
-    alignItems: 'center',
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 20,
+  },
+  tabBarInfoContainer2: {
+    position: 'absolute',
+    left: 20,
+    right: 20,
+    top: 340,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#004977',
+        shadowOffset: { height: -3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
     backgroundColor: '#fbfbfb',
     paddingVertical: 20,
   },
   tabBarInfoText: {
-    fontSize: 17,
+    fontSize: 20,
+    paddingHorizontal: 10,
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
   },
-  navigationFilename: {
-    marginTop: 5,
+  tabBarName: {
+    fontSize: 15,
+    paddingHorizontal: 10,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
+    alignSelf: 'flex-start',
+  },
+  tabBarBalance: {
+    fontSize: 30,
+    paddingHorizontal: 10,
+    color: '#000',
+    // alignSelf: 'flex-end',
   },
   helpContainer: {
     marginTop: 15,
@@ -177,5 +186,11 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: '#2e78b7',
+  },
+  moneyView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
